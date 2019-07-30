@@ -33,7 +33,7 @@ class Person(
         nullable = false,
         unique = true
     )
-    var phone: String,
+    var phone: String = "########",
 
     @field:Column(
         name = "is_active",
