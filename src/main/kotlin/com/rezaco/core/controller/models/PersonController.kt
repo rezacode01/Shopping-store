@@ -38,4 +38,16 @@ class PersonController {
     ) : PersonInfo{
        return personService.getPersonById(personId)
     }
+
+    @PostMapping("/{personId}/block")
+    @ResponseStatus(HttpStatus.OK)
+    fun blockPersonById(@PathVariable personId: Long) : PersonInfo{
+        return personService.blockThisPerson(personId)
+    }
+
+    @PostMapping("/{personId}/unblock")
+    @ResponseStatus(HttpStatus.OK)
+    fun unblockPersonById(@PathVariable personId: Long) : PersonInfo{
+        return personService.unblockThisPerson(personId)
+    }
 }

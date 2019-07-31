@@ -9,4 +9,6 @@ interface PersonService {
     fun createPerson(request: CreateOrUpdatePerson) : PersonInfo
     fun getAllPerson(page: Int, size: Int) : Page<PersonInfo>
     fun getPersonById(personId: Long) : PersonInfo
+    fun blockThisPerson(personId: Long) : PersonInfo
+    fun unblockThisPerson(personId: Long) : PersonInfo
 }

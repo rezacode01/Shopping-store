@@ -56,4 +56,30 @@ class PersonServiceImpl : PersonService{
         throw EntityDoesNotExistException(CustomErrorType.PERSON_DOES_NOT_EXIST)
     }
 
+    override fun blockThisPerson(personId: Long): PersonInfo {
+        val thisPerson = personRepo.findById(personId)
+        if (thisPerson.isPresent) {
+            thisPerson.get().isBlocked = true
+            personRepo.save(thisPerson.get())
+
+            logger.info("Person with id: $personId is blocked")
+
+            return PersonInfo.convertEntityToPersonInfo(thisPerson.get())
+        }
+        throw EntityDoesNotExistException(CustomErrorType.PERSON_DOES_NOT_EXIST)
+    }
+
+    override fun unblockThisPerson(personId: Long): PersonInfo {
+        val thisPerson = personRepo.findById(personId)
+        if (thisPerson.isPresent) {
+            thisPerson.get().isBlocked = false
+            personRepo.save(thisPerson.get())
+
+            logger.info("Person with id: $personId is unblocked")
+
+            return PersonInfo.convertEntityToPersonInfo(thisPerson.get())
+        }
+        throw EntityDoesNotExistException(CustomErrorType.PERSON_DOES_NOT_EXIST)
+    }
+
 }
