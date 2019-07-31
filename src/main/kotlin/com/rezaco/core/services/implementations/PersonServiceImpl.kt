@@ -8,9 +8,11 @@ import com.rezaco.core.exceptions.EntityDoesNotExistException
 import com.rezaco.core.models.Person
 import com.rezaco.core.repositories.PersonRepo
 import com.rezaco.core.services.PersonService
-import com.rezaco.core.services.models.Page
+import com.rezaco.core.services.models.CustomPage
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.PageImpl
 import org.springframework.data.domain.PageRequest
 import org.springframework.stereotype.Service
 
@@ -37,15 +39,28 @@ class PersonServiceImpl : PersonService{
         return respPersonInfo
     }
 
-    override fun getAllPerson(page: Int, size: Int): Page<PersonInfo> {
+    override fun getAllPerson(page: Int, size: Int): CustomPage<PersonInfo> {
         val fetchedPersons = personRepo.findAll(PageRequest.of(page, size))
 
-        return Page(
+        return CustomPage(
             list = fetchedPersons.content.map { PersonInfo.convertEntityToPersonInfo(it) },
             totalElements = fetchedPersons.totalElements,
             pageNumber = fetchedPersons.number,
             totalPages = fetchedPersons.totalPages,
             pageSize = fetchedPersons.size
+        )
+    }
+
+    override fun getAllAvailablePerson(page: Int, size: Int): CustomPage<PersonInfo> {
+        val fetchedPersons = personRepo.findAll(PageRequest.of(page, size)).filter{ !it.isDeleted }
+        val pagedPersons = PageImpl<Person>(fetchedPersons.toList())
+
+        return CustomPage(
+            list = pagedPersons.content.map { PersonInfo.convertEntityToPersonInfo(it) },
+            totalElements = pagedPersons.totalElements,
+            pageNumber = pagedPersons.number,
+            totalPages = pagedPersons.totalPages,
+            pageSize = pagedPersons.size
         )
     }
 

@@ -4,7 +4,7 @@ import com.rezaco.core.controller.models.requests.CreatePersonRequest
 import com.rezaco.core.controller.models.requests.UpdatePersonRequest
 import com.rezaco.core.controller.models.responses.PersonInfo
 import com.rezaco.core.services.PersonService
-import com.rezaco.core.services.models.Page
+import com.rezaco.core.services.models.CustomPage
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
@@ -26,10 +26,19 @@ class PersonController {
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     fun getAllPerson(
-        @RequestParam page: Int = 1,
+        @RequestParam page: Int = 0,
         @RequestParam size: Int = 50
-    ) : Page<PersonInfo> {
+    ) : CustomPage<PersonInfo> {
         return personService.getAllPerson(page, size)
+    }
+
+    @GetMapping("/available")
+    @ResponseStatus(HttpStatus.OK)
+    fun getAllAvailablePerson(
+        @RequestParam page: Int = 0,
+        @RequestParam size: Int = 50
+    ) : CustomPage<PersonInfo> {
+        return personService.getAllAvailablePerson(page, size)
     }
 
     @GetMapping("/{personId}")
