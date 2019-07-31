@@ -1,14 +1,15 @@
 package com.rezaco.core.services
 
-import com.rezaco.core.controller.models.requests.CreateOrUpdatePerson
+import com.rezaco.core.controller.models.requests.CreatePersonRequest
+import com.rezaco.core.controller.models.requests.UpdatePersonRequest
 import com.rezaco.core.controller.models.responses.PersonInfo
-import com.rezaco.core.models.Person
 import com.rezaco.core.services.models.Page
 
 interface PersonService {
-    fun createPerson(request: CreateOrUpdatePerson) : PersonInfo
+    fun createPerson(request: CreatePersonRequest) : PersonInfo
     fun getAllPerson(page: Int, size: Int) : Page<PersonInfo>
     fun getPersonById(personId: Long) : PersonInfo
     fun blockThisPerson(personId: Long) : PersonInfo
     fun unblockThisPerson(personId: Long) : PersonInfo
+    fun updatePersonProfile(personId: Long, request: UpdatePersonRequest) : PersonInfo
 }

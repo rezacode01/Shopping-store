@@ -1,6 +1,7 @@
 package com.rezaco.core.controller.models
 
-import com.rezaco.core.controller.models.requests.CreateOrUpdatePerson
+import com.rezaco.core.controller.models.requests.CreatePersonRequest
+import com.rezaco.core.controller.models.requests.UpdatePersonRequest
 import com.rezaco.core.controller.models.responses.PersonInfo
 import com.rezaco.core.services.PersonService
 import com.rezaco.core.services.models.Page
@@ -18,7 +19,7 @@ class PersonController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    fun createPerson(@RequestBody @Valid request: CreateOrUpdatePerson) : PersonInfo {
+    fun createPerson(@RequestBody @Valid request: CreatePersonRequest) : PersonInfo {
         return personService.createPerson(request)
     }
 
@@ -49,5 +50,13 @@ class PersonController {
     @ResponseStatus(HttpStatus.OK)
     fun unblockPersonById(@PathVariable personId: Long) : PersonInfo{
         return personService.unblockThisPerson(personId)
+    }
+
+    @PutMapping("/{personId}")
+    @ResponseStatus(HttpStatus.OK)
+    fun editPerson(
+        @PathVariable personId: Long,
+        @RequestBody request: UpdatePersonRequest) : PersonInfo {
+            return personService.updatePersonProfile(personId, request)
     }
 }

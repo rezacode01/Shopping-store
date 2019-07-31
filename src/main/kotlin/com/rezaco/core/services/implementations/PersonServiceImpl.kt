@@ -1,6 +1,7 @@
 package com.rezaco.core.services.implementations
 
-import com.rezaco.core.controller.models.requests.CreateOrUpdatePerson
+import com.rezaco.core.controller.models.requests.CreatePersonRequest
+import com.rezaco.core.controller.models.requests.UpdatePersonRequest
 import com.rezaco.core.controller.models.responses.PersonInfo
 import com.rezaco.core.enums.CustomErrorType
 import com.rezaco.core.exceptions.EntityDoesNotExistException
@@ -22,10 +23,9 @@ class PersonServiceImpl : PersonService{
 
     private val logger = LoggerFactory.getLogger(PersonServiceImpl::class.java)
 
-    override fun createPerson(request: CreateOrUpdatePerson) : PersonInfo{
+    override fun createPerson(request: CreatePersonRequest) : PersonInfo{
 
         val newPerson = Person(
-            email = request.email,
             phone = request.phone
         )
 
@@ -82,4 +82,17 @@ class PersonServiceImpl : PersonService{
         throw EntityDoesNotExistException(CustomErrorType.PERSON_DOES_NOT_EXIST)
     }
 
+    override fun updatePersonProfile(personId: Long, request: UpdatePersonRequest): PersonInfo {
+        val thisPerson = personRepo.findById(personId)
+        if (thisPerson.isPresent) {
+            thisPerson.get().name = request.name
+            thisPerson.get().email = request.email
+            personRepo.save(thisPerson.get())
+
+            logger.info("Person with id: $personId is updated with new info $request")
+
+            return PersonInfo.convertEntityToPersonInfo(thisPerson.get())
+        }
+        throw EntityDoesNotExistException(CustomErrorType.PERSON_DOES_NOT_EXIST)
+    }
 }
